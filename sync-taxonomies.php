@@ -35,56 +35,50 @@ add_action('network_admin_menu', 'st_network_add_pages');
 
 
 /**
- * Add page to settings menu in network admin panel
+ * Render the form. Tacke care of postback.
  *
  */
 function st_manager() {
 
   $done = null;
+  $taxonomies = get_taxonomies();
+
+  // We dont want the main site in the list, only sub sites
   $sites = wp_get_sites(array('offset' => 1));
 
   if(isset($_POST['sync'])) {
 
+    // Get all terms from source taxonomy
     $terms_to_sync = get_terms(array($_POST['taxonomy_source']), array('hide_empty' => false));
     $taxonomy_target = $_POST['taxonomy_target'];
 
+    // Loop through sites and update the terms
     if( count( $_POST['sites'] ) ) {
       $count = 0;
       foreach ($_POST['sites'] as $site) {
-
         switch_to_blog($site);
-
         foreach ($terms_to_sync as $term) {
-
           wp_insert_term(
-            $term->name, // the term
-            $taxonomy_target, // the taxonomy
+            $term->name,
+            $taxonomy_target,
             array(
               'description'=> $term->description,
               'slug' => $term->slug
             )
           );
-
         }
-
         restore_current_blog();
-        $count++;
-
       }
-
       $done = true;
     }
-
   }
-
-  $taxonomies = get_taxonomies();
   ?>
 
   <div class="wrap">
 
     <?php
     if( $done )
-      echo '<div id="message" class="updated fade"><p><strong>' . __( 'Sync was completed successfully. ' . $count . ' blogs were updated.', 'wpmu-sync-taxonomies' ) . '</strong></p></div>';
+      echo '<div id="message" class="updated fade"><p><strong>' . __( 'Sync was completed successfully.', 'wpmu-sync-taxonomies' ) . '</strong></p></div>';
 
     echo '<h2>' . __( 'Synchronize Taxonomies', 'wpmu-sync-taxonomies' ) . '</h2>'; ?>
 
@@ -140,10 +134,4 @@ function st_manager() {
     </form>
   </div> <!-- end .wrap -->
   <?php
-}
-
-
-
-function st_run_syncronisation() {
-
 }
