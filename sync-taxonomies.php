@@ -15,7 +15,7 @@ Author URI: http://consid.se/
  *
  */
 function st_add_pages() {
-  if ( is_site_admin() ) {
+  if ( is_super_admin() ) {
     add_submenu_page('tools.php', 'Sync Taxonomies', 'Sync Taxonomies', 'manage_options', 'synctaxonomies', 'st_manager' );
   }
 }

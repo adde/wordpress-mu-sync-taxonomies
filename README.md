@@ -21,5 +21,8 @@ This software is free and carries a WTFPL license.
 
 Changelog
 ---------
+0.0.2 (2014-06-18)
+* Replaced deprecated function `is_site_admin()` with `is_super_admin()` to prevent notices.
+
 0.0.1 (2014-06-17)
 * First release.
